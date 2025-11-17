@@ -1,16 +1,21 @@
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
+
+# Ajoute src au PYTHONPATH
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", "src"))
 
 import pytest
 import numpy as np
-from src.data_loader import load_iris_data
-from src.model import IrisClassifier
+from data_loader import load_iris_data
+from model import IrisClassifier
+
 
 class TestIrisClassifier:
     def setup_method(self):
         """Setup method that runs before each test"""
-        self.X_train, self.X_test, self.y_train, self.y_test = load_iris_data(test_size=0.3, random_state=42)
+        self.X_train, self.X_test, self.y_train, self.y_test = load_iris_data(
+            test_size=0.3, random_state=42
+        )
         self.classifier = IrisClassifier()
 
     def test_model_initialization(self):
@@ -57,6 +62,7 @@ class TestIrisClassifier:
         original_pred = self.classifier.predict(self.X_test[:5])
         loaded_pred = new_classifier.predict(self.X_test[:5])
         assert np.array_equal(original_pred, loaded_pred)
+
 
 def test_data_loading():
     """Test data loading functionality"""
