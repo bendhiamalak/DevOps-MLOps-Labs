@@ -1,21 +1,29 @@
 # Use official Python runtime as base image
-FROM python:3.9-slim
+FROM python:3.10-slim
 
-# Set the working directory inside the container
+# Set working directory
 WORKDIR /app
 
-# Copy requirements
+# Copy requirements and install dependencies
 COPY requirements.txt .
-
-# Install dependencies
 RUN pip install --upgrade pip && \
-    pip install -r requirements.txt
+    pip install -r requirements.txt && \
+    pip install pytest flake8
 
-# Copy all application code to container
+# Copy all project files
 COPY . .
 
-# Create models directory for storing trained models
+# Create directory for storing trained models
 RUN mkdir -p models
 
-# Run Training
+# Expose port if using Flask (optional)
+# EXPOSE 5000
+
+# Run linter (optional, can comment if not needed)
+# RUN flake8 src/ tests/
+
+# Run tests (optional, can comment if not needed)
+# RUN pytest --maxfail=1 --disable-warnings -q
+
+# Default command to train the model
 CMD ["python", "src/train.py"]
